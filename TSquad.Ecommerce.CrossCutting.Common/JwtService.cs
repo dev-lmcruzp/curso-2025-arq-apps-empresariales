@@ -3,7 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using TSquad.Ecommerce.Domain.Entity;
+using TSquad.Ecommerce.Domain;
+using TSquad.Ecommerce.Domain.Entities;
 
 namespace TSquad.Ecommerce.CrossCutting.Common;
 

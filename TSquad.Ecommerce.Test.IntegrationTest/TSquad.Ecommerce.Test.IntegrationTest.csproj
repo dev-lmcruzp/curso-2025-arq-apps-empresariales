@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TSquad.Ecommerce.Service.WebApi\TSquad.Ecommerce.Service.WebApi.csproj" />
+      <ProjectReference Include="..\TSquad.Ecommerce.Services.WebApi\TSquad.Ecommerce.Services.WebApi.csproj" />
     </ItemGroup>
 
     <ItemGroup>

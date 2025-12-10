@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using TSquad.Ecommerce.Application.DTO;
 using TSquad.Ecommerce.Application.Interface;
+using TSquad.Ecommerce.Application.Interface.UseCases;
 
 namespace TSquad.Ecommerce.Test.IntegrationTest;
 
