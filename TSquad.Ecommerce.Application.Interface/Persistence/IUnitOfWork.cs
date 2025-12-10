@@ -5,4 +5,6 @@ public interface IUnitOfWork : IDisposable
     ICustomerRepository Customers { get; }
     IUserRepository Users { get; }
     ICategoryRepository Categories { get; }
+    IDiscountRepository  Discounts { get; }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

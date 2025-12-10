@@ -46,6 +46,12 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
         }
         
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("GetAllWithPaginationAsync")]
         [SwaggerOperation(
             Summary = "Lista los clientes paginado",
@@ -100,10 +106,9 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
         public async Task<IActionResult> Create([FromBody] CustomerDto body)
         {
             var response = await _customerApplication.InsertAsync(body);
-            if (response.IsSuccess)
-                return Ok(response);
-            
-            return StatusCode(StatusCodes.Status500InternalServerError, response);
+            return response.IsSuccess 
+                ? Ok(response) 
+                : StatusCode(StatusCodes.Status500InternalServerError, response);
         }
         
         /// <summary>
@@ -124,10 +129,9 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
                 return BadRequest();
             
             var response = await _customerApplication.UpdateAsync(body);
-            if (response.IsSuccess)
-                return Ok(response);
-            
-            return StatusCode(StatusCodes.Status500InternalServerError, response);
+            return response.IsSuccess 
+                ? Ok(response) 
+                : StatusCode(StatusCodes.Status500InternalServerError, response);
         }
         
         /// <summary>

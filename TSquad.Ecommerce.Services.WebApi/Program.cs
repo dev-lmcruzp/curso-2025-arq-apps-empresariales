@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using Asp.Versioning.ApiExplorer;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using TSquad.Ecommerce.Application.UseCases;
@@ -9,19 +11,15 @@ using TSquad.Ecommerce.Services.WebApi.Modules.HealthCheck;
 using TSquad.Ecommerce.Services.WebApi.Modules.RateLimiter;
 using TSquad.Ecommerce.Services.WebApi.Modules.Redis;
 using TSquad.Ecommerce.Services.WebApi.Modules.Swagger;
-using TSquad.Ecommerce.Services.WebApi.Modules.Validator;
 using TSquad.Ecommerce.Services.WebApi.Modules.Versioning;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 // Add services to the container.
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
-
-var myPolicy = "AllowSpecificOrigin";
+const string myPolicy = "AllowSpecificOrigin";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(myPolicy,
@@ -33,14 +31,19 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddPersistence();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    var enumConverter = new JsonStringEnumConverter();
+    options.JsonSerializerOptions.Converters.Add(enumConverter);
+});
+
+builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddLoggingService(builder.Configuration);
 builder.Host.UseSerilog();
 
 
 builder.Services.AddAuth(builder.Configuration);
-builder.Services.AddValidator();
 builder.Services.AddHealthCheck(builder.Configuration);
 builder.Services.AddRedisCache(builder.Configuration);
 builder.Services.AddRateLimiter(builder.Configuration);
@@ -90,16 +93,7 @@ app.MapControllers();
 app.MapHealthChecks("/health", new HealthCheckOptions()
 {
     Predicate = _ => true,
-    /*ResponseWriter = async (context, report) =>
-    {
-        context.Response.ContentType = "application/json";
-        var result = new
-        {
-            status = report.Status.ToString(),
-            checks = report.Entries.Select(e => new { e.Key, status = e.Value.Status.ToString() })
-        };
-        await context.Response.WriteAsJsonAsync(result);
-    }*/
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 app.MapHealthChecksUI();
 

@@ -16,22 +16,22 @@ public class CustomerRepository : ICustomerRepository
         _context = context;
     }
     
-    public async Task<bool> InsertAsync(Customer customer)
+    public async Task<bool> InsertAsync(Customer entity)
     {
         using var connection = _context.CreateConnection();
         const string query = "CustomersInsert";
         var parameters = new DynamicParameters();
-        parameters.Add("CustomerID", customer.CustomerId);
-        parameters.Add("CompanyName", customer.CompanyName);
-        parameters.Add("ContactName", customer.ContactName);
-        parameters.Add("ContactTitle", customer.ContactTitle);
-        parameters.Add("Address", customer.Address);
-        parameters.Add("City", customer.City);
-        parameters.Add("Region", customer.Region);
-        parameters.Add("PostalCode", customer.PostalCode);
-        parameters.Add("Country", customer.Country);
-        parameters.Add("Phone", customer.Phone);
-        parameters.Add("Fax", customer.Fax);
+        parameters.Add("CustomerID", entity.CustomerId);
+        parameters.Add("CompanyName", entity.CompanyName);
+        parameters.Add("ContactName", entity.ContactName);
+        parameters.Add("ContactTitle", entity.ContactTitle);
+        parameters.Add("Address", entity.Address);
+        parameters.Add("City", entity.City);
+        parameters.Add("Region", entity.Region);
+        parameters.Add("PostalCode", entity.PostalCode);
+        parameters.Add("Country", entity.Country);
+        parameters.Add("Phone", entity.Phone);
+        parameters.Add("Fax", entity.Fax);
         
         var result = await connection.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         return result > 0;
@@ -58,12 +58,12 @@ public class CustomerRepository : ICustomerRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(string customerId)
+    public async Task<bool> DeleteAsync(string id)
     {
         using var connection = _context.CreateConnection();
         const string query = "CustomersDelete";
         var parameters = new DynamicParameters();
-        parameters.Add("CustomerID", customerId);
+        parameters.Add("CustomerID", id);
         var result = await connection.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         return result > 0;
     }
@@ -76,12 +76,12 @@ public class CustomerRepository : ICustomerRepository
         return customers;
     }
 
-    public async Task<Customer?> GetAsync(string customerId)
+    public async Task<Customer?> GetAsync(string id)
     {
         using var connection = _context.CreateConnection();
         const string query = "CustomersGetByID";
         var parameters = new DynamicParameters();
-        parameters.Add("CustomerID", customerId);
+        parameters.Add("CustomerID", id);
         var customer = await connection.QuerySingleOrDefaultAsync<Customer>(query, parameters, commandType: CommandType.StoredProcedure);
         return customer;
     }

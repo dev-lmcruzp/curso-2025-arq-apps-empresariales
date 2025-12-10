@@ -22,8 +22,8 @@ public static class HealthCheckExtensions
        services.AddHealthChecks()
            .AddSqlServer(configuration.GetConnectionString("NorthwindConnection")!,
                tags: ["database"])
-           .AddRedis(configuration.GetConnectionString("RedisConnection")!, tags: ["cache"]);
-           //.AddCheck<HealthCheckCustom>("HealthCheckCustom", tags: ["custom"]);
+           .AddRedis(configuration.GetConnectionString("RedisConnection")!, tags: ["cache"])
+           .AddCheck<HealthCheckCustom>("HealthCheckCustom", tags: ["custom"]);
         
         services.AddHealthChecksUI().AddInMemoryStorage();
         
