@@ -1,0 +1,30 @@
+<Project Sdk="MSTest.Sdk/3.6.4">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UseVSTest>true</UseVSTest>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.11" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.11" />
+      <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TSquad.Ecommerce.Service.WebApi\TSquad.Ecommerce.Service.WebApi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="appsettings.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

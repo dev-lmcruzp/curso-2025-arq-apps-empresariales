@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TSquad.Ecommerce.Domain.Entity\TSquad.Ecommerce.Domain.Entity.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.11" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+    </ItemGroup>
+
+</Project>

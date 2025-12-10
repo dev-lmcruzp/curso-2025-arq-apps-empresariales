@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TSquad.Ecommerce.Application.DTO\TSquad.Ecommerce.Application.DTO.csproj" />
+      <ProjectReference Include="..\TSquad.Ecommerce.CrossCutting.Common\TSquad.Ecommerce.CrossCutting.Common.csproj" />
+    </ItemGroup>
+
+</Project>
