@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 
 namespace TSquad.Ecommerce.Services.WebApi.Modules.Versioning;
 

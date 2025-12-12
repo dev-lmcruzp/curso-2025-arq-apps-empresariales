@@ -1,3 +1,4 @@
+// using System.Text.Json;
 using AutoMapper;
 using TSquad.Ecommerce.Application.DTO;
 using TSquad.Ecommerce.Application.Interface.Infrastructure;
@@ -16,15 +17,19 @@ public class DiscountApplication : IDiscountApplication
     private readonly IMapper _mapper;
     private readonly DiscountDtoValidator _discountDtoValidator;
     private readonly IEventBus _eventBus;
+    //private readonly ISendmail _sendmail;
 
 
-    public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,  DiscountDtoValidator discountDtoValidator,
-        IEventBus eventBus)
+    public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,  
+        DiscountDtoValidator discountDtoValidator, IEventBus eventBus
+        //,ISendmail sendmail
+        )
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _discountDtoValidator = discountDtoValidator;
         _eventBus = eventBus;
+        //_sendmail = sendmail;
     }
 
     public async Task<ResponsePagination<List<DiscountDto>>> GetAllWithPaginationAsync(int pageNumber, int pageSize)
@@ -119,6 +124,9 @@ public class DiscountApplication : IDiscountApplication
                 response.Message = "Registration successful";
                 var discountCreateEvent = _mapper.Map<DiscountCreatedEvent>(discount); 
                 _eventBus.Publish(discountCreateEvent);
+                
+                /*Enviar correo*/
+                // await _sendmail.SendMailAsync(response.Message, JsonSerializer.Serialize(discount), cancellationToken);
             }
         }
         catch (Exception e)

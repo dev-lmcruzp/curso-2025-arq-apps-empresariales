@@ -2,9 +2,12 @@ using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using SendGrid.Extensions.DependencyInjection;
 using TSquad.Ecommerce.Application.Interface.Infrastructure;
 using TSquad.Ecommerce.Infrastructure.EventBus;
 using TSquad.Ecommerce.Infrastructure.EventBus.Options;
+using TSquad.Ecommerce.Infrastructure.Sendmail;
+using TSquad.Ecommerce.Infrastructure.Sendmail.Options;
 
 namespace TSquad.Ecommerce.Infrastructure;
 
@@ -32,6 +35,15 @@ public static class ConfigureServices
                 cfg.ConfigureEndpoints(context);
             });
         });
+
+        services.AddScoped<ISendmail, SendgridMail>();
+        services.ConfigureOptions<SendgridOptions>();
+        var sendgridOptions = services.BuildServiceProvider()
+            .GetRequiredService<IOptions<SendgridOptions>>()
+            .Value;
+
+        services.AddSendGrid(opts => { opts.ApiKey = sendgridOptions.ApiKey; });
+        
         return services;
     }
 }
