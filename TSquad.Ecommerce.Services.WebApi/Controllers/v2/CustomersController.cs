@@ -61,9 +61,9 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
         public async Task<IActionResult> GetAll([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             var response = await _customerApplication.GetAllWithPaginationAsync(pageNumber, pageSize);
-            return response.IsSuccess 
-                ? Ok(response) 
-                : StatusCode(StatusCodes.Status500InternalServerError, response);
+            return response.IsSuccess
+                ? Ok(response)
+                : NotFound(response);
         }
         
         /// <summary>
@@ -83,13 +83,9 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
                 return BadRequest();
             
             var response = await _customerApplication.GetAsync(customerId);
-            if (!response.IsSuccess)
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            
-            if(response.Data is not null)
-                return Ok(response);
-
-            return NotFound(response);
+            return response.IsSuccess
+                ? Ok(response)
+                : NotFound(response);
         }
 
         /// <summary>
@@ -151,10 +147,9 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
                 return BadRequest();
             
             var response = await _customerApplication.DeleteAsync(customerId);
-            if (response.IsSuccess)
-                return Ok(response);
-            
-            return StatusCode(StatusCodes.Status500InternalServerError, response);
+            return response.IsSuccess 
+                ? Ok(response) 
+                : StatusCode(StatusCodes.Status500InternalServerError, response);
         }
     }
 }

@@ -27,36 +27,34 @@ public class CategoryApplication : ICategoryApplication
     {
         var response = new Response<IEnumerable<CategoryDto>>();
         const string cacheKey = "categories";
-        try
+        var redisCategories = await _distributedCache.GetStringAsync(cacheKey);
+        if (redisCategories != null)
         {
-            var redisCategories = await _distributedCache.GetStringAsync(cacheKey);
-            if (redisCategories != null)
-            {
-                response.Data = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(redisCategories);
-            }
-            else
-            {
-                var categories = await _unitOfWork.Categories.GetAllAsync();
-                response.Data = _mapper.Map<IEnumerable<CategoryDto>>(categories);
-                var serializedCategories = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(categories));
-                var options = new DistributedCacheEntryOptions()
-                    .SetAbsoluteExpiration(DateTime.Now.AddHours(8))
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(60));
+            response.Data = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(redisCategories);
+        }
+        else
+        {
+            var categories = await _unitOfWork.Categories.GetAllAsync();
+            response.Data = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+            var serializedCategories = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(categories));
+            var options = new DistributedCacheEntryOptions()
+                .SetAbsoluteExpiration(DateTime.Now.AddHours(8))
+                .SetSlidingExpiration(TimeSpan.FromMinutes(60));
                 
-                await _distributedCache.SetAsync(cacheKey, serializedCategories, options);
-            }
-            
-            
-            if (response.Data is not null)
-            {
-                response.IsSuccess = true;
-                response.Message = "Consulta exitosa";
-            }
+            await _distributedCache.SetAsync(cacheKey, serializedCategories, options);
         }
-        catch (Exception e)
+
+
+        if (response.Data is null)
         {
-            response.Message = e.Message;
+            response.Message = "Sin registros";
+            return response;
         }
+        
+        
+        response.IsSuccess = true;
+        response.Message = "Consulta exitosa";
+        
         return response;
     }
 }

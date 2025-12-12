@@ -9,6 +9,7 @@ using TSquad.Ecommerce.Infrastructure;
 using TSquad.Ecommerce.Persistence;
 using TSquad.Ecommerce.Services.WebApi.Modules.Authentication;
 using TSquad.Ecommerce.Services.WebApi.Modules.HealthCheck;
+using TSquad.Ecommerce.Services.WebApi.Modules.Middlewares;
 using TSquad.Ecommerce.Services.WebApi.Modules.RateLimiter;
 using TSquad.Ecommerce.Services.WebApi.Modules.Redis;
 using TSquad.Ecommerce.Services.WebApi.Modules.Swagger;
@@ -42,6 +43,7 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddLoggingService(builder.Configuration);
+builder.Services.AddTransient<GlobalExceptionHandler>();
 builder.Host.UseSerilog();
 
 
@@ -108,6 +110,8 @@ app.MapHealthChecks("/health", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 app.MapHealthChecksUI();
+
+app.AddMiddleware();
 
 try
 {
