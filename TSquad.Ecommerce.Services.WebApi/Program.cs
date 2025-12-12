@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using TSquad.Ecommerce.Application.UseCases;
 using TSquad.Ecommerce.CrossCutting.Logging;
+using TSquad.Ecommerce.Infrastructure;
 using TSquad.Ecommerce.Persistence;
 using TSquad.Ecommerce.Services.WebApi.Modules.Authentication;
 using TSquad.Ecommerce.Services.WebApi.Modules.HealthCheck;
@@ -38,6 +39,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddLoggingService(builder.Configuration);
 builder.Host.UseSerilog();

@@ -1,10 +1,12 @@
 using AutoMapper;
 using TSquad.Ecommerce.Application.DTO;
+using TSquad.Ecommerce.Application.Interface.Infrastructure;
 using TSquad.Ecommerce.Application.Interface.Persistence;
 using TSquad.Ecommerce.Application.Interface.UseCases;
 using TSquad.Ecommerce.Application.Validator;
 using TSquad.Ecommerce.CrossCutting.Common;
 using TSquad.Ecommerce.Domain.Entities;
+using TSquad.Ecommerce.Domain.Events;
 
 namespace TSquad.Ecommerce.Application.UseCases.Discounts;
 
@@ -13,13 +15,16 @@ public class DiscountApplication : IDiscountApplication
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly DiscountDtoValidator _discountDtoValidator;
+    private readonly IEventBus _eventBus;
 
 
-    public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,  DiscountDtoValidator discountDtoValidator)
+    public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,  DiscountDtoValidator discountDtoValidator,
+        IEventBus eventBus)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _discountDtoValidator = discountDtoValidator;
+        _eventBus = eventBus;
     }
 
     public async Task<Response<List<DiscountDto>>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -87,6 +92,8 @@ public class DiscountApplication : IDiscountApplication
             {
                 response.IsSuccess = true;
                 response.Message = "Registration successful";
+                var discountCreateEvent = _mapper.Map<DiscountCreatedEvent>(discount); 
+                _eventBus.Publish(discountCreateEvent);
             }
         }
         catch (Exception e)

@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSquad.Ecommerce.Services.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSquad.Ecommerce.Test.IntegrationTest", "TSquad.Ecommerce.Test.IntegrationTest\TSquad.Ecommerce.Test.IntegrationTest.csproj", "{9E29CF52-FBCB-4B91-8C9E-1B98EC31BDED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSquad.Ecommerce.Infrastructure", "TSquad.Ecommerce.Infrastructure\TSquad.Ecommerce.Infrastructure.csproj", "{BC513B7B-FAF1-43C2-AFA6-4A7EA2BAAF32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,7 @@ Global
 		{978D33EF-9FCA-4B43-8267-F08F3F6A9A4D} = {2D448F3F-58CA-4318-9564-48ED501D13D1}
 		{5A50F123-6D17-4F27-B0EF-CDE1290BDEA0} = {91E1E811-D059-413D-8A85-0E7925963F68}
 		{9E29CF52-FBCB-4B91-8C9E-1B98EC31BDED} = {3DF1F8DC-49BA-4130-A797-36CCCF07AA49}
+		{BC513B7B-FAF1-43C2-AFA6-4A7EA2BAAF32} = {17694230-364E-4D2A-A1FD-983E8B1C0EF2}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1AEEAEE9-F580-4492-9BD9-949D766EEC13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -90,5 +93,9 @@ Global
 		{9E29CF52-FBCB-4B91-8C9E-1B98EC31BDED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E29CF52-FBCB-4B91-8C9E-1B98EC31BDED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E29CF52-FBCB-4B91-8C9E-1B98EC31BDED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC513B7B-FAF1-43C2-AFA6-4A7EA2BAAF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC513B7B-FAF1-43C2-AFA6-4A7EA2BAAF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC513B7B-FAF1-43C2-AFA6-4A7EA2BAAF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC513B7B-FAF1-43C2-AFA6-4A7EA2BAAF32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

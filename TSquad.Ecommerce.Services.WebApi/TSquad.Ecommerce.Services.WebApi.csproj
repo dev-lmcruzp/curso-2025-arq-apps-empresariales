@@ -34,6 +34,7 @@
       <ProjectReference Include="..\TSquad.Ecommerce.Application.Interface\TSquad.Ecommerce.Application.Interface.csproj" />
       <ProjectReference Include="..\TSquad.Ecommerce.Application.UseCases\TSquad.Ecommerce.Application.UseCases.csproj" />
       <ProjectReference Include="..\TSquad.Ecommerce.CrossCutting.Logging\TSquad.Ecommerce.CrossCutting.Logging.csproj" />
+      <ProjectReference Include="..\TSquad.Ecommerce.Infrastructure\TSquad.Ecommerce.Infrastructure.csproj" />
       <ProjectReference Include="..\TSquad.Ecommerce.Persistence\TSquad.Ecommerce.Persistence.csproj" />
     </ItemGroup>
 
