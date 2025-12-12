@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TSquad.Ecommerce.Application.Interface.Persistence;
 using TSquad.Ecommerce.Domain.Entities;
 using TSquad.Ecommerce.Persistence.Contexts;
+using TSquad.Ecommerce.Persistence.Mocks.Discount;
 
 namespace TSquad.Ecommerce.Persistence.Repositories;
 
@@ -64,14 +65,17 @@ public class DiscountRepository : IDiscountRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Discount>> GetAllWithPaginationAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<Discount>> GetAllWithPaginationAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        var faker = new DiscountGetAllWithPaginationAsyncBogusConfig();
+        var result = await Task.Run(() => faker.Generate(1000));
+        
+        return result.Skip((pageNumber - 1) * pageSize).Take(pageSize);
     }
 
-    public Task<int> CountAsync()
+    public async Task<int> CountAsync()
     {
-        throw new NotImplementedException();
+        return await Task.Run(() => 1000);
     }
 
     public Task<Discount?> GetAsync(string id)

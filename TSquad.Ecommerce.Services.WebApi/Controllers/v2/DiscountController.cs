@@ -26,6 +26,21 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllWithPaginationAsync")]
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var response = await _discountApplication.GetAllWithPaginationAsync(pageNumber, pageSize);
+            return response.IsSuccess 
+                ? Ok(response) 
+                : StatusCode(StatusCodes.Status500InternalServerError, response);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAll()

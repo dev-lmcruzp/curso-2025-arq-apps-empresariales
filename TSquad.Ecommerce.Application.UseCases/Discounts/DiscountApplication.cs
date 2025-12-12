@@ -27,6 +27,31 @@ public class DiscountApplication : IDiscountApplication
         _eventBus = eventBus;
     }
 
+    public async Task<ResponsePagination<List<DiscountDto>>> GetAllWithPaginationAsync(int pageNumber, int pageSize)
+    {
+        var response = new ResponsePagination<List<DiscountDto>>();
+        try
+        {
+            var customers = await _unitOfWork.Discounts.GetAllWithPaginationAsync(pageNumber, pageSize);
+            var count = await _unitOfWork.Discounts.CountAsync();
+            response.Data = _mapper.Map<List<DiscountDto>>(customers);
+            if (response.Data is not null)
+            {
+                response.PageNumber = pageNumber;
+                response.PageSize = pageSize;
+                // response.TotalPage =  (int)Math.Ceiling((double)count / pageSize);
+                response.TotalCount = count;
+                response.IsSuccess = true;
+                response.Message = "Consulta exitosa";
+            }
+        }
+        catch (Exception e)
+        {
+            response.Message = e.Message;
+        }
+        return response;
+    }
+
     public async Task<Response<List<DiscountDto>>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var response = new Response<List<DiscountDto>>();
