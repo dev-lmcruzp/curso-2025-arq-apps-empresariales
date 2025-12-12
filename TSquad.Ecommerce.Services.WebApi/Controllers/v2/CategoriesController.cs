@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Swashbuckle.AspNetCore.Annotations;
 using TSquad.Ecommerce.Application.DTO;
-using TSquad.Ecommerce.Application.Interface;
 using TSquad.Ecommerce.Application.Interface.UseCases;
 using TSquad.Ecommerce.CrossCutting.Common;
 

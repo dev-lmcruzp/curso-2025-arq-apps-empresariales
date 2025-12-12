@@ -75,6 +75,16 @@ if (app.Environment.IsDevelopment())
         c.ShowExtensions();
     });
     // app.MapOpenApi();
+
+    app.UseReDoc(opts =>
+    {
+        opts.DocumentTitle = "TSquad technology services API market";
+        foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+        {
+            opts.SpecUrl = $"/swagger/{description.GroupName}/swagger.json";
+        }
+    });
+
 }
 
 app.UseSerilogRequestLogging();
