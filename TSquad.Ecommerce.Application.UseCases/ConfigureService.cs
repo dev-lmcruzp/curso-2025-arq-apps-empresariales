@@ -14,6 +14,12 @@ public static class ConfigureService
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        });
+        
         services.AddScoped<ICustomerApplication, CustomerApplication>();
         services.AddScoped<IAuthApplication, AuthApplication>();
         services.AddScoped<ICategoryApplication, CategoryApplication>();

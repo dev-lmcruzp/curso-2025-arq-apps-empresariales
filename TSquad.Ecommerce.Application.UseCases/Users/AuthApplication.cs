@@ -5,7 +5,6 @@ using TSquad.Ecommerce.Application.Interface.UseCases;
 using TSquad.Ecommerce.Application.Validator;
 using TSquad.Ecommerce.CrossCutting.Common;
 using TSquad.Ecommerce.CrossCutting.Logging;
-using TSquad.Ecommerce.Domain;
 using TSquad.Ecommerce.Domain.Entities;
 
 namespace TSquad.Ecommerce.Application.UseCases.Users;
@@ -85,7 +84,6 @@ public class AuthApplication : IAuthApplication
             if (!isValidPassword)
             {
                 response.Message = "Credenciales invalidas";
-                response.IsSuccess = false;
                 return response;
             }
             

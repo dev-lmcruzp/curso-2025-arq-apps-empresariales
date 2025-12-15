@@ -36,8 +36,8 @@ public static class ConfigureServices
             });
         });
 
+        services.ConfigureOptions<SendgridOptionsSetup>();
         services.AddScoped<ISendmail, SendgridMail>();
-        services.ConfigureOptions<SendgridOptions>();
         var sendgridOptions = services.BuildServiceProvider()
             .GetRequiredService<IOptions<SendgridOptions>>()
             .Value;

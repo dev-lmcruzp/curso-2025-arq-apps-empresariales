@@ -1,4 +1,4 @@
-// using System.Text.Json;
+using System.Text.Json;
 using AutoMapper;
 using TSquad.Ecommerce.Application.DTO;
 using TSquad.Ecommerce.Application.Interface.Infrastructure;
@@ -17,19 +17,18 @@ public class DiscountApplication : IDiscountApplication
     private readonly IMapper _mapper;
     private readonly DiscountDtoValidator _discountDtoValidator;
     private readonly IEventBus _eventBus;
-    //private readonly ISendmail _sendmail;
+    private readonly ISendmail _sendmail;
 
 
     public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,  
-        DiscountDtoValidator discountDtoValidator, IEventBus eventBus
-        //,ISendmail sendmail
+        DiscountDtoValidator discountDtoValidator, IEventBus eventBus, ISendmail sendmail
         )
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _discountDtoValidator = discountDtoValidator;
         _eventBus = eventBus;
-        //_sendmail = sendmail;
+        _sendmail = sendmail;
     }
 
     public async Task<ResponsePagination<List<DiscountDto>>> GetAllWithPaginationAsync(int pageNumber, int pageSize)
@@ -44,7 +43,6 @@ public class DiscountApplication : IDiscountApplication
             {
                 response.PageNumber = pageNumber;
                 response.PageSize = pageSize;
-                // response.TotalPage =  (int)Math.Ceiling((double)count / pageSize);
                 response.TotalCount = count;
                 response.IsSuccess = true;
                 response.Message = "Consulta exitosa";
@@ -126,7 +124,7 @@ public class DiscountApplication : IDiscountApplication
                 _eventBus.Publish(discountCreateEvent);
                 
                 /*Enviar correo*/
-                // await _sendmail.SendMailAsync(response.Message, JsonSerializer.Serialize(discount), cancellationToken);
+                 await _sendmail.SendEmailAsync(response.Message, JsonSerializer.Serialize(discount), cancellationToken);
             }
         }
         catch (Exception e)

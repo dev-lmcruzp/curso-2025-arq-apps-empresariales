@@ -2,7 +2,6 @@ using System.Data;
 using Dapper;
 using Microsoft.AspNetCore.Identity;
 using TSquad.Ecommerce.Application.Interface.Persistence;
-using TSquad.Ecommerce.Domain;
 using TSquad.Ecommerce.Domain.Entities;
 using TSquad.Ecommerce.Persistence.Contexts;
 
