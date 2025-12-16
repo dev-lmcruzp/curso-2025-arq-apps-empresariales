@@ -15,7 +15,7 @@ public static class ConfigureService
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<DapperContext>();
-        services.AddSingleton<AuditableEntitySaveChangesInterceptor>();
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("NorthwindConnection"),

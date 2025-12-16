@@ -25,7 +25,7 @@ public static class HealthCheckExtensions
            .AddRedis(configuration.GetConnectionString("RedisConnection")!, tags: ["cache"])
            .AddCheck<HealthCheckCustom>("HealthCheckCustom", tags: ["custom"]);
         
-        services.AddHealthChecksUI().AddInMemoryStorage();
+        // services.AddHealthChecksUI().AddInMemoryStorage();
         
         return services;
     }

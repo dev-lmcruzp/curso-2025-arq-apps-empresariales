@@ -31,7 +31,11 @@ public static class ConfigureService
         services.AddScoped<ICategoryApplication, CategoryApplication>();
         services.AddScoped<IDiscountApplication, DiscountApplication>();
         services.AddScoped<IJwtService, JwtService>();
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        // services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddMaps(Assembly.GetExecutingAssembly());
+        });
         return services;
     }
 }
