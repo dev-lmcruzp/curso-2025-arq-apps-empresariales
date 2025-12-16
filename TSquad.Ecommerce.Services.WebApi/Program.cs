@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Asp.Versioning.ApiExplorer;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -9,6 +8,7 @@ using TSquad.Ecommerce.CrossCutting.Logging;
 using TSquad.Ecommerce.Infrastructure;
 using TSquad.Ecommerce.Persistence;
 using TSquad.Ecommerce.Services.WebApi.Modules.Authentication;
+using TSquad.Ecommerce.Services.WebApi.Modules.Feature;
 using TSquad.Ecommerce.Services.WebApi.Modules.HealthCheck;
 using TSquad.Ecommerce.Services.WebApi.Modules.Middlewares;
 using TSquad.Ecommerce.Services.WebApi.Modules.RateLimiter;
@@ -18,28 +18,11 @@ using TSquad.Ecommerce.Services.WebApi.Modules.Versioning;
 using TSquad.Ecommerce.Services.WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
 // Add services to the container.
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-const string myPolicy = "AllowSpecificOrigin";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(myPolicy,
-        b =>
-        {
-            b.WithOrigins(configuration["Config:OriginCors"]!) // Replace with your allowed origin(s)
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
-
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    var enumConverter = new JsonStringEnumConverter();
-    options.JsonSerializerOptions.Converters.Add(enumConverter);
-});
+builder.Services.AddFeature(builder.Configuration);
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -101,9 +84,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseRateLimiter();
+app.UseRequestTimeouts();
 app.UseEndpoints(_ => { });
 
-app.UseCors(myPolicy);
+app.UseCors(PresentationConstant.MyPolicyCors);
 
 app.MapControllers();
 // app.MapHealthChecks("/health");

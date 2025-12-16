@@ -1,9 +1,11 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TSquad.Ecommerce.Application.DTO;
 using TSquad.Ecommerce.Application.Interface.UseCases;
+using TSquad.Ecommerce.Services.WebApi.Modules.Feature;
 
 namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
 {
@@ -45,7 +47,7 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _discountApplication.GetAllAsync();
+            var response = await _discountApplication.GetAllAsync(HttpContext.RequestAborted);
             return response.IsSuccess 
                 ? Ok(response) 
                 : StatusCode(StatusCodes.Status500InternalServerError, response);
@@ -57,12 +59,13 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
         /// <param name="discountId"></param>
         /// <returns></returns>
         [HttpGet("{discountId:int}")]
+        [RequestTimeout(PresentationConstant.MyPolicyRequestTimeout)]
         public async Task<IActionResult> Get([FromRoute] int discountId)
         {
-            var response = await _discountApplication.GetAsync(discountId);
+            var response = await _discountApplication.GetAsync(discountId, HttpContext.RequestAborted);
             if (!response.IsSuccess)
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
-            
+
             if(response.Data is not null)
                 return Ok(response);
 
