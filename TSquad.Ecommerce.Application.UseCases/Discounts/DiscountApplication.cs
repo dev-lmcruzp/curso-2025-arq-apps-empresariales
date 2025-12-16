@@ -4,7 +4,6 @@ using TSquad.Ecommerce.Application.DTO;
 using TSquad.Ecommerce.Application.Interface.Infrastructure;
 using TSquad.Ecommerce.Application.Interface.Persistence;
 using TSquad.Ecommerce.Application.Interface.UseCases;
-using TSquad.Ecommerce.Application.Validator;
 using TSquad.Ecommerce.CrossCutting.Common;
 using TSquad.Ecommerce.Domain.Entities;
 using TSquad.Ecommerce.Domain.Events;
@@ -15,18 +14,15 @@ public class DiscountApplication : IDiscountApplication
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    private readonly DiscountDtoValidator _discountDtoValidator;
     private readonly IEventBus _eventBus;
     private readonly ISendmail _sendmail;
 
 
-    public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,  
-        DiscountDtoValidator discountDtoValidator, IEventBus eventBus, ISendmail sendmail
-        )
+    public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,
+        IEventBus eventBus, ISendmail sendmail)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _discountDtoValidator = discountDtoValidator;
         _eventBus = eventBus;
         _sendmail = sendmail;
     }
@@ -52,6 +48,7 @@ public class DiscountApplication : IDiscountApplication
         {
             response.Message = e.Message;
         }
+
         return response;
     }
 
@@ -72,6 +69,7 @@ public class DiscountApplication : IDiscountApplication
         {
             response.Message = e.Message;
         }
+
         return response;
     }
 
@@ -88,7 +86,7 @@ public class DiscountApplication : IDiscountApplication
                 response.Message = "Consulta exitosa";
                 return response;
             }
-            
+
             response.IsSuccess = true;
             response.Message = $"Cliente {id} no existe!!!";
         }
@@ -96,23 +94,16 @@ public class DiscountApplication : IDiscountApplication
         {
             response.Message = e.Message;
         }
+
         return response;
     }
 
-    public async Task<Response<bool>> InsertAsync(DiscountDto discountDto, CancellationToken cancellationToken = default)
+    public async Task<Response<bool>> InsertAsync(DiscountDto discountDto,
+        CancellationToken cancellationToken = default)
     {
         var response = new Response<bool>();
         try
         {
-            var validation = await _discountDtoValidator.ValidateAsync(discountDto, cancellationToken);
-            
-            if (!validation.IsValid)
-            {
-                response.Message = "Errores de validación";
-                response.Errors = validation.Errors;
-                return response;
-            }
-            
             var discount = _mapper.Map<Discount>(discountDto);
             await _unitOfWork.Discounts.InsertAsync(discount);
             response.Data = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
@@ -120,11 +111,11 @@ public class DiscountApplication : IDiscountApplication
             {
                 response.IsSuccess = true;
                 response.Message = "Registration successful";
-                var discountCreateEvent = _mapper.Map<DiscountCreatedEvent>(discount); 
+                var discountCreateEvent = _mapper.Map<DiscountCreatedEvent>(discount);
                 _eventBus.Publish(discountCreateEvent);
-                
+
                 /*Enviar correo*/
-                 await _sendmail.SendEmailAsync(response.Message, JsonSerializer.Serialize(discount), cancellationToken);
+                await _sendmail.SendEmailAsync(response.Message, JsonSerializer.Serialize(discount), cancellationToken);
             }
         }
         catch (Exception e)
@@ -135,7 +126,8 @@ public class DiscountApplication : IDiscountApplication
         return response;
     }
 
-    public async Task<Response<bool>> UpdateAsync(DiscountDto discountDto, CancellationToken cancellationToken = default)
+    public async Task<Response<bool>> UpdateAsync(DiscountDto discountDto,
+        CancellationToken cancellationToken = default)
     {
         var response = new Response<bool>();
         try
@@ -149,7 +141,7 @@ public class DiscountApplication : IDiscountApplication
                 response.Message = "Actualición exitosa";
                 return response;
             }
-            
+
             response.IsSuccess = true;
             response.Message = $"Descuento {discountDto.Id} no existe!!!";
         }
@@ -174,7 +166,7 @@ public class DiscountApplication : IDiscountApplication
                 response.Message = "Eliminación exitosa";
                 return response;
             }
-            
+
             response.IsSuccess = true;
             response.Message = $"Descuento {id} no existe!!!";
         }

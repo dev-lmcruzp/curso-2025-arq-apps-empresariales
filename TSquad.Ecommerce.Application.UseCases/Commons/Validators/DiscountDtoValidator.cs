@@ -1,7 +1,7 @@
 using FluentValidation;
 using TSquad.Ecommerce.Application.DTO;
 
-namespace TSquad.Ecommerce.Application.Validator;
+namespace TSquad.Ecommerce.Application.UseCases.Commons.Validators;
 
 public class DiscountDtoValidator : AbstractValidator<DiscountDto>
 {

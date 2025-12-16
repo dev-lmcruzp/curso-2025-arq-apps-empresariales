@@ -2,7 +2,6 @@ using AutoMapper;
 using TSquad.Ecommerce.Application.DTO;
 using TSquad.Ecommerce.Application.Interface.Persistence;
 using TSquad.Ecommerce.Application.Interface.UseCases;
-using TSquad.Ecommerce.Application.Validator;
 using TSquad.Ecommerce.CrossCutting.Common;
 using TSquad.Ecommerce.CrossCutting.Logging;
 using TSquad.Ecommerce.Domain.Entities;
@@ -15,16 +14,14 @@ public class AuthApplication : IAuthApplication
     private readonly IJwtService _jwtService;
     private readonly IMapper _mapper;
     private readonly IAppLogger<AuthApplication> _logger;
-    private readonly SignInValidator _signInValidator;
 
     public AuthApplication(IJwtService jwtService, IUnitOfWork unitOfWork, IMapper mapper,
-        IAppLogger<AuthApplication> logger,  SignInValidator signInValidator)
+        IAppLogger<AuthApplication> logger)
     {
         _jwtService = jwtService;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _logger = logger;
-        _signInValidator = signInValidator;
     }
 
     public async Task<Response<bool>> SignUpAsync(SignUpDto signUpDto)
@@ -62,14 +59,6 @@ public class AuthApplication : IAuthApplication
     public async Task<Response<TokenDto>> SignInAsync(SignInDto signInDto)
     {
         var response = new Response<TokenDto>();
-        
-        var validation = await _signInValidator.ValidateAsync(signInDto);
-        if (!validation.IsValid)
-        {
-            response.Message = "Errores de validación";
-            response.Errors = validation.Errors;
-            return response;
-        }
         try
         {
             var user = await _unitOfWork.Users.GetByEmailAsync(signInDto.Email);
