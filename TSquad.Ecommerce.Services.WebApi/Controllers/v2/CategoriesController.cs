@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,6 +15,7 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
     [ApiController]
     [SwaggerTag("Operaciones de Autenticación")]
     [ApiVersion("2.0")]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryApplication _categoryApplication;

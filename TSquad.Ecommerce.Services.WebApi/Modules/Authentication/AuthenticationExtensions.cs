@@ -18,6 +18,7 @@ public static class AuthenticationExtensions
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSection = configuration.GetSection("Jwt");
+        services.AddHttpContextAccessor();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

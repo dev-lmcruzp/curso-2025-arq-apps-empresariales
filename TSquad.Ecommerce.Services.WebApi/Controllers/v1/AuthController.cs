@@ -2,7 +2,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TSquad.Ecommerce.Application.DTO;
-using TSquad.Ecommerce.Application.Interface;
 using TSquad.Ecommerce.Application.Interface.UseCases;
 
 namespace TSquad.Ecommerce.Services.WebApi.Controllers.v1

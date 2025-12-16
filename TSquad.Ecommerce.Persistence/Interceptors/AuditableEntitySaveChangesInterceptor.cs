@@ -1,15 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using TSquad.Ecommerce.Application.Interface.Presentation;
 using TSquad.Ecommerce.Domain.Common;
 
 namespace TSquad.Ecommerce.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
+    private readonly ICurrentUser _currentUser;
+
+    public AuditableEntitySaveChangesInterceptor(ICurrentUser currentUser)
+    {
+        _currentUser = currentUser;
+    }
+
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
         UpdateEntities(eventData.Context);
-        return  base.SavingChanges(eventData, result);
+        return base.SavingChanges(eventData, result);
     }
 
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
@@ -19,7 +27,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         return  base.SavingChangesAsync(eventData, result, cancellationToken);
     }
     
-    private static void UpdateEntities(DbContext? context)
+    private void UpdateEntities(DbContext? context)
     {
         if (context == null) return;
 
@@ -28,11 +36,11 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = "system";
+                    entry.Entity.CreatedBy = _currentUser.UserId;
                     entry.Entity.Created = DateTime.Now;
                     continue;
                 case EntityState.Modified:
-                    entry.Entity.LastModifiedBy = "system";
+                    entry.Entity.LastModifiedBy = _currentUser.UserId;
                     entry.Entity.LastModified = DateTime.Now;
                     continue;
                 case EntityState.Detached:

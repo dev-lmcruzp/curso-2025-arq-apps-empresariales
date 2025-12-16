@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using TSquad.Ecommerce.Domain;
 using TSquad.Ecommerce.Domain.Entities;
 
 namespace TSquad.Ecommerce.CrossCutting.Common;
@@ -21,12 +20,14 @@ public class JwtService : IJwtService
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
+        
         var claims = new Claim[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-            new Claim(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Name, user.UserName),
+            new(ClaimTypes.GivenName, user.FirstName),
+            new(ClaimTypes.Surname, user.LastName),
+            new(ClaimTypes.Email, user.Email),
         };
 
         var token = new JwtSecurityToken(

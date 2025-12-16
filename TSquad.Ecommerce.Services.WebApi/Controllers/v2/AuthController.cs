@@ -2,7 +2,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TSquad.Ecommerce.Application.DTO;
-using TSquad.Ecommerce.Application.Interface;
 using TSquad.Ecommerce.Application.Interface.UseCases;
 
 namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
@@ -19,6 +18,7 @@ namespace TSquad.Ecommerce.Services.WebApi.Controllers.v2
     {
         private readonly IAuthApplication _authApplication;
 
+        /// <inheritdoc />
         public AuthController(IAuthApplication authApplication)
         {
             _authApplication = authApplication;

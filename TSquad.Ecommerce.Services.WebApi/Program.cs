@@ -3,6 +3,7 @@ using Asp.Versioning.ApiExplorer;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
+using TSquad.Ecommerce.Application.Interface.Presentation;
 using TSquad.Ecommerce.Application.UseCases;
 using TSquad.Ecommerce.CrossCutting.Logging;
 using TSquad.Ecommerce.Infrastructure;
@@ -14,6 +15,7 @@ using TSquad.Ecommerce.Services.WebApi.Modules.RateLimiter;
 using TSquad.Ecommerce.Services.WebApi.Modules.Redis;
 using TSquad.Ecommerce.Services.WebApi.Modules.Swagger;
 using TSquad.Ecommerce.Services.WebApi.Modules.Versioning;
+using TSquad.Ecommerce.Services.WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -44,6 +46,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddLoggingService(builder.Configuration);
 builder.Services.AddTransient<GlobalExceptionHandler>();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Host.UseSerilog();
 
 
