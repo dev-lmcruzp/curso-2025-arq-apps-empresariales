@@ -8,6 +8,7 @@ using TSquad.Ecommerce.Infrastructure.EventBus;
 using TSquad.Ecommerce.Infrastructure.EventBus.Options;
 using TSquad.Ecommerce.Infrastructure.Sendmail;
 using TSquad.Ecommerce.Infrastructure.Sendmail.Options;
+using TSquad.Ecommerce.Infrastructure.Services;
 
 namespace TSquad.Ecommerce.Infrastructure;
 
@@ -43,6 +44,8 @@ public static class ConfigureServices
             .Value;
 
         services.AddSendGrid(opts => { opts.ApiKey = sendgridOptions.ApiKey; });
+
+        services.AddScoped<IServiceBusService, ServiceBusService>();
         
         return services;
     }

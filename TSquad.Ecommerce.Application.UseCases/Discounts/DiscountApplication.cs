@@ -15,16 +15,18 @@ public class DiscountApplication : IDiscountApplication
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IEventBus _eventBus;
+    private readonly IServiceBusService _busService;
     private readonly ISendmail _sendmail;
 
 
     public DiscountApplication(IUnitOfWork unitOfWork, IMapper mapper,
-        IEventBus eventBus, ISendmail sendmail)
+        IEventBus eventBus, ISendmail sendmail, IServiceBusService busService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _eventBus = eventBus;
         _sendmail = sendmail;
+        _busService = busService;
     }
 
     public async Task<ResponsePagination<List<DiscountDto>>> GetAllWithPaginationAsync(int pageNumber, int pageSize)
@@ -111,11 +113,13 @@ public class DiscountApplication : IDiscountApplication
             {
                 response.IsSuccess = true;
                 response.Message = "Registration successful";
-                var discountCreateEvent = _mapper.Map<DiscountCreatedEvent>(discount);
-                _eventBus.Publish(discountCreateEvent);
-
+                
                 /*Enviar correo*/
                 await _sendmail.SendEmailAsync(response.Message, JsonSerializer.Serialize(discount), cancellationToken);
+                
+                var discountEvent = _mapper.Map<DiscountCreatedEvent>(discount);
+                _eventBus.Publish(discountEvent);
+                await _busService.SendMessageAsync("discount-created-event", discountEvent);
             }
         }
         catch (Exception e)
@@ -139,6 +143,11 @@ public class DiscountApplication : IDiscountApplication
             {
                 response.IsSuccess = true;
                 response.Message = "Actualición exitosa";
+                
+                var discountEvent = _mapper.Map<DiscountUpdatedEvent>(discount);
+                _eventBus.Publish(discountEvent);
+                await _busService.SendMessageAsync("discount-updated-event", discountEvent);
+                
                 return response;
             }
 
@@ -164,6 +173,10 @@ public class DiscountApplication : IDiscountApplication
             {
                 response.IsSuccess = true;
                 response.Message = "Eliminación exitosa";
+                
+                var discountEvent = new DiscountDeletedEvent() { Id = id };
+                _eventBus.Publish(discountEvent);
+                await _busService.SendMessageAsync("discount-deleted-event", discountEvent);
                 return response;
             }
 

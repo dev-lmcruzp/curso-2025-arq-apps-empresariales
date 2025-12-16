@@ -20,6 +20,7 @@ public class MappingsProfile : Profile
         CreateMap<SignUpCommand, User>();
         CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Discount, DiscountDto>().ReverseMap();
-        CreateMap<Discount, DiscountCreatedEvent>().ReverseMap();
+        CreateMap<Discount, DiscountCreatedEvent>();
+        CreateMap<Discount, DiscountUpdatedEvent>();
     }
 }
